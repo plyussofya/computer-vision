@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from skimage.measure import label
 from skimage.morphology import binary_erosion
 
-image = np.load("D:\\Users\\plyus\\Desktop\\универ\\Введение в компьютерное зрение\\Counting objects\\ps.npy.txt")
+image = np.load("ps.npy.txt")
 
 mask1 = np.array([[1, 1, 1, 1, 1, 1],
                   [1, 1, 1, 1, 1, 1],
