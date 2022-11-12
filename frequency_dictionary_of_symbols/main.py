@@ -56,7 +56,7 @@ def recognize(im_region):
         else:
             return 'W'
 
-im = plt.imread("D:\\Users\\plyus\\Desktop\\универ\\Введение в компьютерное зрение\\Frequency dictionary of symbols\\symbols.png")
+im = plt.imread("symbols.png")
 im = np.mean(im, 2)
 im[im > 0] = 1 
 
