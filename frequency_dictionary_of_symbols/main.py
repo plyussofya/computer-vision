@@ -39,7 +39,7 @@ def recognize(im_region):
             if (rr / im_region.image.shape[0] > 0.45) and (cc / im_region.image.shape[1] > 0.4):
                 return 'D'
             else:
-                return 'R'
+                return 'P'
         else:
             return 'A'
     elif lakes == 0:
