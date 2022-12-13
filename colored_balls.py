@@ -27,7 +27,7 @@ print("indexes:", index)
 while cam.isOpened():
     position = []
     _, frame = cam.read()
-    #frame = cv2.GaussianBlur(frame, (25, 25), 0)
+    frame = cv2.GaussianBlur(frame, (25, 25), 0)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, lower_b, upper_b)
     mask2 = cv2.inRange(hsv, lower_r, upper_r)
