@@ -1,11 +1,13 @@
 import cv2
 import numpy as np
 import random
+import time
+import math
 
 cv2.namedWindow("Image", cv2.WINDOW_AUTOSIZE)
 cam = cv2.VideoCapture(0)
 cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
-cam.set(cv2.CAP_PROP_EXPOSURE, -3)
+cam.set(cv2.CAP_PROP_EXPOSURE, -5)
 cam.set(cv2.CAP_PROP_AUTO_WB, 0)
 
 #98-101 206-255 125-255 blue
@@ -23,6 +25,10 @@ lst = {0: "blue", 1: "red", 2: "green"}
 index = list(lst.keys())
 random.shuffle(index)
 print("indexes:", index)
+
+previous_time = 0
+previous_x = 0
+previous_y = 0
 
 while cam.isOpened():
     position = []
@@ -45,10 +51,19 @@ while cam.isOpened():
     if len(contours2) > 0:
         c = max(contours2, key=cv2.contourArea)
         (x2, y2), radius = cv2.minEnclosingCircle(c)
+        current_time = time.time()
         position.append(x2)
         if radius > 20:
             cv2.circle(frame, (int(x2), int(y2)), int(radius), (0, 255, 255), 2)
             cv2.putText(frame, f"Color = red", (10, 60), cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 255, 0))
+            resolution = (54 / 100) / (radius * 2)
+            distance = (math.sqrt((x - previous_x) ** 2 + (y - previous_y) ** 2)) * resolution
+            speed = distance / (current_time - previous_time)
+            if speed != 0.0:
+                print(speed)
+            previous_time = time.time()
+            previous_x = 0
+            previous_y = 0
     if len(contours3) > 0:
         c = max(contours3, key=cv2.contourArea)
         (x3, y3), radius = cv2.minEnclosingCircle(c)
@@ -57,7 +72,7 @@ while cam.isOpened():
             cv2.circle(frame, (int(x3), int(y3)), int(radius), (0, 255, 255), 2)
             cv2.putText(frame, f"Color = green", (10, 90), cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 255, 0)) 
     cv2.putText(frame, f"Порядок - {lst.get(index[0])}, {lst.get(index[1])}, {lst.get(index[2])}, ", (10, 120), cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 255, 255))
-
+    
     if len(position) == 3:
         if position[index[0]] < position[index[1]] < position[index[2]]:
             cv2.putText(frame, f"УГАДАЛИ!!!!", (10, 150), cv2.FONT_HERSHEY_COMPLEX, 0.7, (0, 255, 0))
